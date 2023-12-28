@@ -1,0 +1,24 @@
+select a.client_id
+    , case
+        when a.day_count >= 10 then 'Frequent'
+        else 'Non-frequent'
+      end as client_call_freq
+    , case
+        when a.month_count >= 10 then 'Frequent Consistent'
+        when a.day_count >= 10 then 'Frequent Inconsistent'
+        when a.day_count >= 3 then 'Moderate'
+        when a.day_count > 0 then 'Infrequent'
+      end as client_call_freq_type
+from (
+
+    select client_id
+        , count(*) as intcn_count
+        , count(distinct start_date) as day_count
+        , count(distinct month_end_date) as month_count
+    from DATABASE.fake_financial_calls
+    where start_date between beg_dt and end_dt
+        and direction = 'Inbound'
+        and queue_accepted > 0
+        and client_id > 0
+        and resource_id is not null
+    group by 1
