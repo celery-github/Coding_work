@@ -1,0 +1,19 @@
+### Group by ###
+#Use case: Aggregating data and grouping rows based on a specified column or columns.
+#Example: Suppose you have a sales table containing orders with information such as product, quantity sold, and sales date. 
+#You might want to know the total quantity sold for each product
+
+SELECT product_id, SUM(quantity) AS total_quantity_sold
+FROM sales
+GROUP BY product_id;
+
+### Order by ###
+#Use case: Sorting the result set based on one or more columns.
+#Example: Continuing with the previous example, 
+#you might want to see the products with the highest total quantity sold at the top of the result set
+
+SELECT product_id, SUM(quantity) AS total_quantity_sold
+FROM sales
+GROUP BY product_id
+ORDER BY total_quantity_sold DESC;
+
