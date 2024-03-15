@@ -1,0 +1,11 @@
+q = """select dialog
+  , date
+  , step_number
+  , result_speech
+  , encrypted
+  , sensitivity
+from prod_database.speech.table
+where encrypted = 0
+and sensitivity = 'None'
+and result_speech != 'null'
+order by step_number
