@@ -16,5 +16,3 @@ app_name
 from prod_database.prod_table_events
 where app_name = 'ICF' 
 and dialog_id = '-2302AC0AAA77-XXXX6'""").show(50)
-
-    h
