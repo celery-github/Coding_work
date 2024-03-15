@@ -1,0 +1,32 @@
+### Question: the top 5 customers by department, ranked by the total amount of money they've spent. 
+Adjustments may be needed based on the specific structure of your database schema.
+
+### Answer and explanation:
+# The WITH clause is used to create a common table expression (CTE) named ranked_customers, 
+which calculates the total amount spent by each customer in each department and ranks them based on the amount spent within each department.
+
+# The ROW_NUMBER() function is used to assign a ranking to each customer within their respective department, 
+ordered by the total amount spent (in descending order).
+
+# The main query then selects the customer_id, department_id, and total_spent columns from the ranked_customers CTE, 
+filtering only the top 5 customers in each department based on their rankings.
+ 
+# Finally, the results are sorted by department_id and total_spent in descending order to display the top-spending customers within each department.
+
+
+WITH ranked_customers AS (
+    SELECT 
+        customer_id,
+        department_id,
+        SUM(amount) AS total_spent,
+        ROW_NUMBER() OVER (PARTITION BY department_id ORDER BY SUM(amount) DESC) AS department_rank
+    FROM orders
+    GROUP BY customer_id, department_id
+)
+SELECT
+    customer_id,
+    department_id,
+    total_spent
+FROM ranked_customers
+WHERE department_rank <= 5
+ORDER BY department_id, total_spent DESC;
